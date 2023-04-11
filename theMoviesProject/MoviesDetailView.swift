@@ -6,24 +6,36 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
+
+/* View for the movie detail page. */
 
 struct MoviesDetailView: View {
-    @State var id: Int?
-    @State var details: MovieDetails?
+    var id: Int?
+    @State var movieDetails: MovieDetails? = nil
+    init(id: Int?) {
+        self.id = id!
+    }
+    
     var body: some View {
-        Text( "\(id!)")
-//            .onAppear() {
-//                restAPI().getData(url: Constants.movieDetailsApiEndpoint + "\(id)" + Constants.apiAuthKey, id: nil) { (details) in self.details = details
-//                     }
-//
-//            }
-//
+        VStack(spacing: 50) {
+            WebImage(url: URL(string: Constants.imageLink + (movieDetails?.poster_path ?? "")))
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: 200, maxHeight: 300, alignment: .top)
+                .cornerRadius(14)
+            Text(movieDetails?.original_title ?? "")
+                .font(.body)
+                .fontWeight(.semibold)
+            Text(movieDetails?.overview ?? "")
+                .padding()
+                .font(.body)
+            Spacer()
+        }
+        .onAppear(){
+            restAPI().getData(url: Constants.movieDetailsApiEndpoint + String(self.id ?? 0) + Constants.apiAuthKey, type: MovieDetails.self) { (details) in movieDetails = details
+            }
+        }
     }
 }
     
-
-struct MoviesDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        MoviesDetailView()
-    }
-}

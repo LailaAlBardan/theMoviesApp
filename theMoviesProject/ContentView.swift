@@ -8,6 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/* The main page for dispayinh all the movies from the RestAPI */
 
 struct ContentView: View {
     
@@ -23,9 +24,8 @@ struct ContentView: View {
                         .scaledToFill()
                         .frame(width: 150, height: 220)
                         .cornerRadius(14)
-                    
                     VStack(alignment: .leading){
-                        NavigationLink(movieTitle.title, value: movieTitle.id )
+                        NavigationLink(movieTitle.title, destination: MoviesDetailView(id: movieTitle.id))
                             .font(.title)
                             .padding(.bottom)
                         HStack{
@@ -37,16 +37,16 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationDestination(for: Int.self, destination: MoviesDetailView.init)
             .navigationTitle("Trending Movies")
             .onAppear() {
-                restAPI().getData(url: Constants.listOfMoviesApiEndpoint, type: Movies) { (movies) in self.movies = movies
-                     }
+                restAPI().getData(url: Constants.listOfMoviesApiEndpoint, type: Movies.self) { (movies) in self.movies = movies
+                }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
-
+    
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

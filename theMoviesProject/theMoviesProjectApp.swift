@@ -12,7 +12,7 @@ struct theMoviesProjectApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LaunchView()
         }
     }
 }
